@@ -13,25 +13,24 @@ void read()
 {   FILE*fp;
 	int i;
 	p=zggz;
-	if((fp=fopen("gz.dat","rb"))==NULL)
+	if((fp=fopen("gz.dat","rt"))==NULL)
 	{
-		cout<<"打开文件失败.\n";
+		printf("打不开文件!\n");
 		getch();
 		exit(-1);
 	}
    for(i=0;i<=100;i++,p++){
 		fread(p,sizeof(struct zggz),1,fp);
 		n++;
-		cout<<"  "<<p->num<<"  "<<p->name<<"  "<<p->gw<<"  "<<p->xj<<"  "<<p->zw<<"  "<<p->jx<<"  "<<p->yf<<"  "<<p->shui<<"  "<<p->sf<<endl;
-		
 		if(feof(fp))
 		{
-	    cout<<"读取结束\n";
+	    printf("读取结束!\n");
 		break;
 		}
        }
     fclose(fp);
-	cout<<"一共有"<<n<<"位员工";
+	printf("一共有%d位员工\n",n);
+
 }
 void write()
 {
@@ -41,7 +40,7 @@ void write()
 
 	if((fp=fopen("gz.dat","wt+"))==NULL)
 	{
-		cout<<"打开文件失败.\n";
+	    printf("打开文件失败.\n");
 		getch();
 	    exit(-1);
 	}
@@ -54,49 +53,128 @@ void write()
 }
 void find()
 {   
-	int i;
+	int i,t=0;
     char gonghao[20];
-	cin>>gonghao;
+	printf("请输入您想要查询职工数据的工号\n");
+	scanf("%s",&gonghao);
 for(i=0;i<100;i++)
 	{
 	if(strcmp(gonghao,zggz[i].num)==0)
 	{
-		cout<<zggz[i].num<<"  "<<zggz[i].name<<"  "<<zggz[i].gw<<"  "<<zggz[i].xj<<"  "<<zggz[i].zw<<"  "<<zggz[i].jx<<"  "<<zggz[i].yf<<"  "<<zggz[i].shui<<"  "<<zggz[i].sf<<endl;
+		printf("%s\t",zggz[i].num);
+		printf("%s\t",zggz[i].name);
+		printf("%d\t",zggz[i].gw);
+		printf("%d\t",zggz[i].xj);
+	    printf("%d\t",zggz[i].zw);
+		printf("%d\t",zggz[i].jx);
+		printf("%d\t",zggz[i].yf);
+		printf("%d\t",zggz[i].shui);
+		printf("%d\n",zggz[i].sf);
+		t=1;
 		break;
+	}  
+}
+	if(t==0)
+	{
+		
+		printf("没有找到这个工号\n");
+	
 	}
-	}
+	
 }
 void list()
 {
 
 	p=zggz;
 	int j;
+	printf("工号\t");
+	printf("姓名\t");
+	printf("岗位工资\t");
+	printf("薪级工资\t");
+	printf("职务津贴\t");
+	printf("绩效工资\t");
+	printf("应发工资\t");
+	printf("个人所得税\t");
+	printf("实发工资\n");
+	
 	for(j=0;j<n;j++,p++)
 	{
-        cout<<"  "<<p->num<<"  "<<p->name<<"  "<<p->gw<<"  "<<p->xj<<"  "<<p->zw<<"  "<<p->jx<<"  "<<p->yf<<"  "<<p->shui<<"  "<<p->sf<<endl;
+        printf("%s\t",p->num);
+		printf("%s\t",p->name);
+		printf("%d\t\t",p->gw);
+		printf("%d\t\t",p->xj);
+		printf("%d\t\t",p->zw);
+		printf("%d\t\t",p->jx);
+		printf("%d\t\t",p->yf);
+		printf("%d\t\t",p->shui);
+		printf("%d\n",p->sf);
 	}
 }
 void modify()
 {
-    int i;
+    int i,t=0;
     char gonghao[20];
-	cin>>gonghao;
+	printf("请输入你想要修改工资数据的职工的工号\n");
+	scanf("%s",&gonghao);
     for(i=0;i<100;i++)
 	{
 	if(strcmp(gonghao,zggz[i].num)==0)
-	{
-		cin>>zggz[i].num>>"  ">>zggz[i].name>>"  ">>zggz[i].gw>>"  ">>zggz[i].xj>>"  ">>zggz[i].zw>>"  ">>zggz[i].jx>>"  ">>zggz[i].yf>>"  ">>zggz[i].shui>>"  ">>zggz[i].sf;
+	{   
+		t=1;
+		printf("请按顺序输入你的新数据\n");
+		printf("工号\t");
+	    printf("姓名\t");
+	    printf("岗位工资\t");
+	    printf("薪级工资\t");
+	    printf("职务津贴\t");
+	    printf("绩效工资\t");
+	    printf("应发工资\t");
+	    printf("个人所得税\t");
+	    printf("实发工资\n");
+		scanf("%s%s%d%d%d%d%d%d%d",&zggz[i].num,&zggz[i].name,&zggz[i].gw,&zggz[i].xj,&zggz[i].zw,&zggz[i].jx,&zggz[i].yf,&zggz[i].shui,&zggz[i].sf);
 		break;
 	}
 }
+    if(t==0)
+	{
+		printf("没有找到这个工号\n");
+	}
+}
+void del()
+{
+
 }
 int main()
 {
-    cout<<" "<<"工号"<<" "<<"姓名"<<" "<<"岗位工资"<<" "<<"薪级工资"<<" "<<"职务津贴"<<" "<<"绩效工资"<<" "<<"应发工资"<<" "<<"个人所得税"<<" "<<"实发工资"<<endl;
+printf("这是学校职员的工资数据操作系统\n");
+	int a; 
     read();
+		
+do{
+
+	printf("请选择您接下来的操作\n");
+	printf("1  查询");
+	printf("2  浏览");
+	printf("3  修改");
+	printf("7  退出\n");
+	scanf("%d",&a);
+	switch(a)
+{
+case 1:
 	find();
-    list();
-	modify();
-    write();
-	return 0;
+	write();
+	break;
+case 2:
+	list();
+	write();
+	break;
+case 3:
+    modify();
+	write();
+	break;
+case 7:
+	exit(0);
+}
+}while(-1);
+    return 0;
 }

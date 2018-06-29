@@ -15,31 +15,34 @@ struct zggz
 	float grsds;//职员的个人所得税
 	float sf;//职员实发工资
 }zggz[100],*p;
-void shui()//计算个人所得税方式
+
+/*计算个人所得税方式*/
+float shui(float tax)
 {
-float xj;
-float zw;
-float jx;
-float sf;
 float grsds;
-	if(yf<=500)
-		grsds=yf*0.05;
-	else if(yf<=2000)
-		grsds=yf*0.10;
-    else if(p->yf<=5000)
-	grsds=p->yf*0.15;
-	else if(yf<=20000)
-		grsds=yf*0.20;
-	else if(yf<=40000)
-		grsds=yf*0.25;
-	else if(yf<=60000)
-		grsds=yf*0.30;
-	else if(yf<=80000)
-	grsds=yf*0.35;
-	else if(yf<=100000)
-		grsds=yf*0.40;
-	else if(yf>100000)
-}	
+
+	if(tax<=500)
+		grsds=tax*0.05;
+	else if(tax<=2000)
+		grsds=(tax-500)*0.10+500*0.05;
+    else if(tax<=5000)
+	grsds=(tax-2000)*0.15+500*0.05+1500*0.10;
+	else if(tax<=20000)
+		grsds=(tax-5000)*0.20+3000*0.15+1500*0.1+500*0.05;
+	else if(tax<=40000)
+		grsds=(tax-20000)*0.25+15000*0.20+3000*0.15+1500*0.1+500*0.05;
+	else if(tax<=60000)
+		grsds=(tax-40000)*0.30+20000*0.25+15000*0.20+3000*0.15+1500*0.1+500*0.05;
+	else if(tax<=80000)
+	grsds=(tax-60000)*0.35+20000*0.3+20000*0.25+15000*0.20+3000*0.15+1500*0.1+500*0.05;
+	else if(tax<=100000)
+		grsds=(tax-80000)*0.40+20000*0.35+20000*0.3+20000*0.25+15000*0.20+3000*0.15+1500*0.1+500*0.05;
+	else if(tax>100000)
+		grsds=(tax-100000)*0.45+20000*0.4+20000*0.35+20000*0.3+20000*0.25+15000*0.20+3000*0.15+1500*0.1+500*0.05;
+	return (grsds);
+}
+
+	
 void read()
 {   FILE*fp;
 	int i;
@@ -61,6 +64,7 @@ void read()
 		break;
 		}
        }
+    n--;
     fclose(fp);
 	printf("!");
 	printf("\t\t一共有%d位员工哟.\t\t",n);
@@ -78,7 +82,7 @@ void write()
 		getch();
 	    exit(-1);
 	}
-	for(i=1;i<=n;i++,p++)
+	for(i=0;i<n;i++,p++)
 	{
 		fwrite(p,sizeof(struct zggz),1,fp);
 	}
@@ -96,10 +100,10 @@ for(i=0;i<100;i++)
 	{
 	if(strcmp(gonghao,zggz[i].num)==0)
 	{
-		printf("\t%s\n",zggz[i].num);
-		printf("\t%s\n",zggz[i].name);
-		printf("\t%f\n",zggz[i].gw);
-		printf("\t%f\n",zggz[i].xj);
+        printf("\t%s\n",zggz[i].num);
+        printf("\t%s\n",zggz[i].name);
+        printf("\t%f\n",zggz[i].gw);
+        printf("\t%f\n",zggz[i].xj);
 	    printf("\t%f\n",zggz[i].zw);
 		printf("\t%f\n",zggz[i].jx);
 		printf("\t%f\n",zggz[i].yf);
@@ -147,13 +151,8 @@ void list()
 }
 void modify()//修改数据待修改
 {
-	float yf;
-float gw;
-float xj;
-float zw;
-float jx;
-float sf;
-float grsds;
+	float grsds;
+
     int i,t=0;
     char gonghao[20];
 	printf("请输入你想要修改工资数据的职工的工号\n");
@@ -171,7 +170,13 @@ float grsds;
 	    printf("职务津贴\t");
 	    printf("绩效工资\t");
 		scanf("%s%s%f%f%f%f",zggz[i].num,zggz[i].name,&zggz[i].gw,&zggz[i].xj,&zggz[i].zw,&zggz[i].jx);
+		/*计算应发工资*/
+		zggz[i] .yf=zggz[i] .gw+zggz[i] .xj+zggz[i] .zw +zggz[i] .jx;
+		/*计算个人所得税*/
 		
+		zggz[i].grsds =shui(zggz[i] .yf);
+		/*计算实发工资*/
+		zggz[i].sf = zggz[i].yf-zggz[i].grsds;
 		printf("经过计算得出其应发工资是%f,个人所得税是%f,实发工资是%f\n",zggz[i].yf,zggz[i].grsds,zggz[i].sf);
 		printf("修改数据已成功!请保存.\n");
 		break;
@@ -235,6 +240,7 @@ void add()//增加职工工资函数待修改
 	{
 	case 1:
 		{
+	    
 		printf("请按顺序输入你的数据\n");
 		printf("工号\t");
 	    printf("姓名\t");
@@ -243,16 +249,17 @@ void add()//增加职工工资函数待修改
 	    printf("职务津贴\t");
 	    printf("绩效工资\t");
 		scanf("%s%s%f%f%f%f",zggz[n] .num, zggz[n] .name, &zggz[n] .gw, &zggz[n] .xj, &zggz[n] .zw, &zggz[n] .jx);
+		printf("%s %s %f %f %f %f",zggz[n].num, zggz[n].name, zggz[n].gw, zggz[n].xj, zggz[n].zw, zggz[n].jx);
+
 		/*计算应发工资*/
-		zggz[n] .yf=zggz[n] .gw+zggz[n] .xj+zggz[n] .zw +zggz[n] .jx;
+		zggz[n].yf = zggz[n].gw + zggz[n].xj + zggz[n].zw + zggz[n].jx;
 		/*计算个人所得税*/
-		zggz[n].grsds = shui(zggz[n] .yf);
+		zggz[n].grsds = shui(zggz[n].yf);
 		/*计算实发工资*/
-		zggz[n].sf = 应发工资-个人所得税
-
-
-		
-		printf("添加数据成功!请保存.\n");
+		zggz[n].sf = zggz[n].yf-zggz[n].grsds ;
+		printf("经过计算得出其应发工资是%f,个人所得税是%f,实发工资是%f\n",zggz[n].yf,zggz[n].grsds,zggz[n].sf);
+		n++;
+        printf("添加数据成功!请保存.\n");
 		}
 	case 2:
 		{
